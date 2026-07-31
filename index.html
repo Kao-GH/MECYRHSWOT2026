@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โหวตข้อความเพื่อการพัฒนาองค์กร · MEC 2569</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#1e2740; --muted:#6b7590;
+    --brand:#2f6fed; --brand-dark:#1f4fc0;
+    --p3:#7c3aed; --p2:#0ea5e9; --p1:#10b981;
+    --p3-bg:#f3ecff; --p2-bg:#e6f6fe; --p1-bg:#e7faf2;
+    --danger:#e11d48; --radius:16px;
+    --shadow:0 2px 10px rgba(30,39,64,.07);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0; font-family:'Noto Sans Thai',sans-serif; background:var(--bg); color:var(--ink); line-height:1.55;}
+
+  .hero{background:linear-gradient(135deg,#1f3a8f 0%,#2f6fed 60%,#5ea0f7 100%); color:#fff; padding:34px 20px 84px; text-align:center;}
+  .hero h1{margin:0 0 8px; font-size:1.45rem; font-weight:800;}
+  .hero p{margin:0 auto; max-width:640px; font-size:.95rem; opacity:.92;}
+  .wrap{max-width:760px; margin:-56px auto 40px; padding:0 14px;}
+
+  .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; margin-bottom:16px;}
+  .rules h2{margin:0 0 10px; font-size:1.05rem; font-weight:700;}
+  .rules ul{margin:0; padding-left:1.2em; font-size:.93rem; color:var(--muted);}
+  .rules li{margin-bottom:5px;}
+  .rules b{color:var(--ink);}
+  .pill{display:inline-block; padding:1px 9px; border-radius:99px; font-weight:700; font-size:.85rem;}
+  .pill.p3{background:var(--p3-bg); color:var(--p3);}
+  .pill.p2{background:var(--p2-bg); color:var(--p2);}
+  .pill.p1{background:var(--p1-bg); color:var(--p1);}
+
+  /* sticky quota bar */
+  .quota{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.94); backdrop-filter:blur(8px);
+    border-bottom:1px solid #e5e9f2; padding:10px 14px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;}
+  .qchip{display:flex; align-items:center; gap:6px; border-radius:99px; padding:6px 14px; font-size:.9rem; font-weight:700; border:2px solid transparent; transition:.2s;}
+  .qchip.p3{background:var(--p3-bg); color:var(--p3);}
+  .qchip.p2{background:var(--p2-bg); color:var(--p2);}
+  .qchip.p1{background:var(--p1-bg); color:var(--p1);}
+  .qchip.done{border-color:currentColor;}
+  .qchip .check{display:none; font-size:.85rem;}
+  .qchip.done .check{display:inline;}
+  .qbar{width:100%; max-width:732px; height:6px; border-radius:99px; background:#e8ecf5; overflow:hidden;}
+  .qbar>div{height:100%; width:0%; border-radius:99px; background:linear-gradient(90deg,#2f6fed,#7c3aed); transition:width .3s;}
+
+  /* statement cards */
+  .stmt{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px; margin-bottom:12px; border:2px solid transparent; transition:border-color .2s, background .2s;}
+  .stmt.sel3{border-color:var(--p3); background:linear-gradient(0deg,var(--p3-bg),#fff 55%);}
+  .stmt.sel2{border-color:var(--p2); background:linear-gradient(0deg,var(--p2-bg),#fff 55%);}
+  .stmt.sel1{border-color:var(--p1); background:linear-gradient(0deg,var(--p1-bg),#fff 55%);}
+  .stmt .top{display:flex; align-items:flex-start; gap:10px;}
+  .code{flex:none; font-family:ui-monospace,monospace; font-size:.78rem; font-weight:700; color:#8a93ad; background:#eef1f7; border-radius:8px; padding:3px 8px; margin-top:2px;}
+  .txt{font-size:.95rem;}
+  .btns{display:flex; gap:8px; margin-top:12px;}
+  .vb{flex:1; border:2px solid #e3e8f2; background:#fff; border-radius:12px; padding:8px 4px; font-family:inherit; font-size:.88rem; font-weight:700; color:var(--muted); cursor:pointer; transition:.15s;}
+  .vb small{display:block; font-weight:500; font-size:.7rem;}
+  .vb:active{transform:scale(.97);}
+  .vb.b3.on{background:var(--p3); border-color:var(--p3); color:#fff;}
+  .vb.b2.on{background:var(--p2); border-color:var(--p2); color:#fff;}
+  .vb.b1.on{background:var(--p1); border-color:var(--p1); color:#fff;}
+  .vb:disabled{opacity:.35; cursor:not-allowed;}
+
+  .submitzone{position:sticky; bottom:0; z-index:50; padding:12px 14px calc(12px + env(safe-area-inset-bottom)); background:linear-gradient(0deg,var(--bg) 70%,transparent);}
+  .submitbtn{display:block; width:100%; max-width:732px; margin:0 auto; padding:15px; border:none; border-radius:14px; font-family:inherit; font-size:1.05rem; font-weight:800; color:#fff; background:linear-gradient(135deg,var(--brand),var(--brand-dark)); cursor:pointer; box-shadow:0 6px 18px rgba(47,111,237,.35); transition:.2s;}
+  .submitbtn:disabled{background:#c3cadb; box-shadow:none; cursor:not-allowed;}
+  .hint{text-align:center; font-size:.85rem; color:var(--muted); margin:6px 0 0;}
+
+  /* modal + done screens */
+  .overlay{position:fixed; inset:0; background:rgba(20,26,45,.55); display:none; align-items:center; justify-content:center; z-index:100; padding:20px;}
+  .overlay.show{display:flex;}
+  .modal{background:#fff; border-radius:18px; max-width:420px; width:100%; padding:26px 24px; text-align:center;}
+  .modal h3{margin:0 0 8px; font-size:1.15rem;}
+  .modal p{margin:0 0 18px; font-size:.92rem; color:var(--muted);}
+  .modal .row{display:flex; gap:10px;}
+  .mbtn{flex:1; padding:12px; border-radius:12px; font-family:inherit; font-size:.95rem; font-weight:700; cursor:pointer; border:2px solid #e3e8f2; background:#fff; color:var(--muted);}
+  .mbtn.primary{border:none; background:linear-gradient(135deg,var(--brand),var(--brand-dark)); color:#fff;}
+  .bigicon{font-size:3rem; margin-bottom:8px;}
+  .spinner{width:38px; height:38px; border:4px solid #e3e8f2; border-top-color:var(--brand); border-radius:50%; margin:0 auto 14px; animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .shake{animation:shake .35s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  #screen-done,#screen-already{display:none; text-align:center; padding:70px 20px;}
+  #screen-done h2,#screen-already h2{font-size:1.3rem;}
+  .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:96px; background:#1e2740; color:#fff; padding:10px 18px; border-radius:99px; font-size:.85rem; opacity:0; transition:opacity .3s; pointer-events:none; z-index:120; max-width:90%; text-align:center;}
+  .toast.show{opacity:.95;}
+</style>
+</head>
+<body>
+
+<div id="screen-vote">
+  <div class="hero">
+    <h1>ร่วมโหวตข้อความเพื่อการพัฒนาองค์กร</h1>
+    <p>ศูนย์แพทยศาสตรศึกษาชั้นคลินิก · MEC 2569 — โปรดเลือกข้อความที่ท่านเห็นว่า "ตรงใจและสำคัญที่สุด" ต่อการพัฒนาองค์กรของเรา</p>
+  </div>
+
+  <div class="wrap">
+    <div class="card rules">
+      <h2>กติกาการโหวต</h2>
+      <ul>
+        <li>เลือกข้อความที่ถูกใจ <b>10 ข้อ จากทั้งหมด 29 ข้อ</b></li>
+        <li><span class="pill p3">3 คะแนน</span> ให้กับ <b>3 ข้อ</b> ที่สำคัญที่สุด</li>
+        <li><span class="pill p2">2 คะแนน</span> ให้กับ <b>3 ข้อ</b> ที่สำคัญรองลงมา</li>
+        <li><span class="pill p1">1 คะแนน</span> ให้กับ <b>4 ข้อ</b> ที่สำคัญถัดไป</li>
+        <li>ข้อความที่ไม่ถูกเลือกจะไม่ถูกนับคะแนน</li>
+        <li>การโหวตเป็น<b>นิรนาม</b> ไม่มีการเก็บชื่อหรืออีเมล — ขอความร่วมมือ<b>ส่งเพียงครั้งเดียว</b></li>
+        <li>ลำดับข้อความถูกสุ่มใหม่สำหรับผู้โหวตแต่ละท่าน รหัสในวงเล็บใช้สำหรับอ้างอิงเท่านั้น</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quota" id="quotaBar">
+    <span class="qchip p3" id="q3">3 คะแนน <span id="c3">0</span>/3 <span class="check">✓</span></span>
+    <span class="qchip p2" id="q2">2 คะแนน <span id="c2">0</span>/3 <span class="check">✓</span></span>
+    <span class="qchip p1" id="q1">1 คะแนน <span id="c1">0</span>/4 <span class="check">✓</span></span>
+    <div class="qbar"><div id="qprog"></div></div>
+  </div>
+
+  <div class="wrap" id="list" style="margin-top:14px;"></div>
+
+  <div class="submitzone">
+    <button class="submitbtn" id="submitBtn" disabled>เลือกให้ครบ 10 ข้อเพื่อส่งโหวต</button>
+    <p class="hint" id="hintTxt">ยังเลือกไม่ครบ — 3 คะแนน 0/3 · 2 คะแนน 0/3 · 1 คะแนน 0/4</p>
+  </div>
+</div>
+
+<div id="screen-done">
+  <div class="bigicon">🎉</div>
+  <h2>ขอบคุณสำหรับความคิดเห็นของท่าน</h2>
+  <p style="color:var(--muted); max-width:420px; margin:8px auto;">คะแนนโหวตของท่านถูกบันทึกเรียบร้อยแล้ว ผลการโหวตโดยรวมจะถูกนำไปใช้ในการวางแผนพัฒนาองค์กรต่อไป</p>
+</div>
+
+<div id="screen-already">
+  <div class="bigicon">✅</div>
+  <h2>ท่านได้ส่งโหวตจากอุปกรณ์นี้แล้ว</h2>
+  <p style="color:var(--muted); max-width:420px; margin:8px auto;">ขอบคุณสำหรับความร่วมมือ — ระบบขอสงวนการโหวต 1 ครั้งต่อท่าน หากเป็นความผิดพลาด กรุณาติดต่อผู้ประสานงาน</p>
+</div>
+
+<div class="overlay" id="confirmOverlay">
+  <div class="modal">
+    <h3>ยืนยันการส่งโหวต?</h3>
+    <p>ท่านเลือกครบ 10 ข้อแล้ว (3-3-4) เมื่อส่งแล้วจะไม่สามารถแก้ไขได้</p>
+    <div class="row">
+      <button class="mbtn" onclick="closeConfirm()">กลับไปแก้ไข</button>
+      <button class="mbtn primary" onclick="submitVote()">ส่งโหวต</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="sendingOverlay">
+  <div class="modal">
+    <div class="spinner"></div>
+    <h3>กำลังส่งคะแนน…</h3>
+    <p>กรุณารอสักครู่ อย่าปิดหน้าต่างนี้</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   1) วาง URL ของ Google Apps Script Web App ที่ deploy แล้วตรงนี้
+   ============================================================ */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHaNtCwCg1jbCf28u1YTVgsOmYLT_qAW1Wh00ACiRkuX9oXDMEvt2GniZyzqrZh-qp/exec";
+
+/* ข้อความทั้ง 30 ข้อ (id ใช้ภายใน ไม่แสดงให้ผู้โหวตเห็น) */
+const STATEMENTS = [
+ {id:"S1", code:"CWJ", text:"มีอาจารย์แพทย์เฉพาะทางหลากหลายสาขา มีคุณวุฒิ และเป็นผู้ปฏิบัติงานจริง"},
+ {id:"S2", code:"YAJ", text:"มีผู้ป่วยศึกษาจำนวนมากและหลากหลาย ระดับความลึกเหมาะสม และมีหัตถการเพียงพอต่อการเรียนรู้ของนิสิตแพทย์"},
+ {id:"S3", code:"UXK", text:"ทีมอาจารย์แพทย์ยังเป็นกลุ่มคนที่มีความกระตือรือร้น สนใจ และมี Growth mindset เป็นสัดส่วนมาก"},
+ {id:"S4", code:"YCH", text:"ทีมผู้อำนวยการโรงพยาบาลกับทีมผู้บริหารศูนย์แพทย์มีความเข้มแข็ง มุ่งมั่น และสนับสนุนงานศูนย์แพทย์อย่างจริงจัง"},
+ {id:"S5", code:"BMM", text:"ผู้อำนวยการศูนย์แพทย์และทีมรองผู้อำนวยการศูนย์แพทย์ มีความตั้งใจ มุ่งมั่นในการทำงานให้กับการพัฒนาศูนย์แพทย์"},
+ {id:"S6", code:"DEC", text:"เป็นศูนย์แพทย์ขนาดเล็ก การบริหารจัดการภายในมีความคล่องตัวสูง เป็นโอกาสในการพัฒนาที่ดี"},
+ {id:"S7", code:"XPP", text:"เป็นศูนย์แพทย์ขนาดเล็ก อาจารย์กับนิสิตแพทย์มีความใกล้ชิด สามารถให้การเรียนรู้และสร้างบรรยากาศการเรียนรู้ที่ดีกว่าได้"},
+ {id:"W1", code:"JIN", text:"อาจารย์แพทย์มีภาระงานบริการสูงมาก ทำให้จัดสรรเวลาสำหรับการสอนและงานวิชาการได้ยาก"},
+ {id:"W2", code:"YTH", text:"อาจารย์ส่วนใหญ่ยังไม่ผ่านการอบรมและยังไม่เห็นความสำคัญของแพทยศาสตรศึกษา เกิดเป็นอุปสรรคในการพัฒนา"},
+ {id:"W3", code:"CKO", text:"งานด้านวิชาการและการสอนไม่ถูกนับเป็นภาระงานที่เป็นรูปธรรม โรงพยาบาลยังไม่ให้ความสำคัญกับภาระงานด้านนี้มากนัก"},
+ {id:"W4", code:"YSM", text:"พื้นที่และสิ่งอำนวยความสะดวกสำหรับการเรียนการสอนยังไม่พร้อม (เช่น ห้องเรียน ห้องสมุด ห้องประชุม ที่พักนิสิต ระบบ ICT/Smart class และอินเทอร์เน็ต เป็นต้น)"},
+ {id:"W5", code:"WKC", text:"ขาดแคลนงบประมาณและบุคลากรเจ้าหน้าที่สายสนับสนุนหรือนักวิชาการศึกษา ทำให้การประสานงานหรืองานธุรการยังไม่เป็นรูปธรรม"},
+ {id:"W6", code:"XRC", text:"เป็นศูนย์แพทย์ที่เพิ่งเริ่มดำเนินการ หลักสูตรยังมีความไม่ชัดเจน บางครั้งรู้สึกไม่มั่นใจในมาตรฐาน"},
+ {id:"W7", code:"PKR", text:"เป็นศูนย์แพทย์ที่เพิ่งเริ่มดำเนินการ การประกันคุณภาพภายในองค์กรยังมีความไม่ชัดเจน บางครั้งรู้สึกไม่มั่นใจในมาตรฐาน"},
+ {id:"O1", code:"YSR", text:"การอยู่ภายใต้มหาวิทยาลัยเกษตรศาสตร์ที่มีชื่อเสียงและมาตรฐาน สร้างความเชื่อมั่น ดึงดูดนิสิตและอาจารย์ศักยภาพสูง อาจเปิดโอกาสร่วมมือกับคณะอื่น และเกิดการพัฒนาได้เร็วกว่าการร่วมมือกับคณะแพทย์มหาวิทยาลัยอื่น"},
+ {id:"O2", code:"DRH", text:"เครือข่ายคณะแพทยศาสตร์ ม.เกษตรศาสตร์ ช่วยให้เข้าถึงแหล่งทุนและการส่งศึกษาดูงานทั้งในและต่างประเทศได้"},
+ {id:"O3", code:"DRX", text:"ได้รับการสนับสนุนด้านงบประมาณในโครงสร้างพื้นฐานของศูนย์แพทย์ จาก ม.เกษตรศาสตร์"},
+ {id:"O4", code:"RSE", text:"ได้รับการสนับสนุนการพัฒนาองค์กรด้านแพทยศาสตรศึกษารวมถึงงบประมาณบางส่วนจากองค์กรภายนอก เช่น สพพ. (CPIRD)"},
+ {id:"O5", code:"QDA", text:"ได้รับการสนับสนุนต่อเนื่องจากฝ่ายการเมืองและจังหวัด"},
+ {id:"O6", code:"BBR", text:"ได้รับการสนับสนุนการพัฒนาองค์กรและงบประมาณจากผู้บริหารสูงสุด"},
+ {id:"O7", code:"GOX", text:"การมีเกณฑ์และการประเมินตาม WFME ช่วยให้ศูนย์แพทย์เกิดการพัฒนาไปตามมาตรฐานได้"},
+ {id:"T1", code:"AFH", text:"นโยบายและงบประมาณจาก ม.เกษตรศาสตร์ ยังไม่ชัดเจนและไม่ต่อเนื่อง ทำให้การดำเนินงาน การปรับปรุงอาคารสถานที่ล่าช้า กระทบการพัฒนาศูนย์แพทย์"},
+ {id:"T2", code:"RAD", text:"ขาดเข็มมุ่ง ตัวชี้วัดหรือแรงจูงใจในการพัฒนาอาจารย์ด้านแพทยศาสตรศึกษา ทำให้ผลักดันให้อาจารย์ทุกคนเรียนรู้ด้านการสอนหรือแพทยศาสตรศึกษาได้ยาก"},
+ {id:"T3", code:"PCD", text:"การบริหารจัดการหรือคณะผู้บริหารของทาง ม.เกษตรศาสตร์ ยังไม่เป็นระบบและมีการปรับเปลี่ยนบ่อย กระทบต่อการพัฒนาศูนย์แพทย์"},
+ {id:"T4", code:"XEV", text:"การมีศูนย์แพทย์สองศูนย์ ทำให้การสื่อสารและทำงานร่วมกันกลายเป็นความลำบาก ภายใต้นโยบายที่การเรียนการสอนต้องเหมือนกัน"},
+ {id:"T5", code:"JXU", text:"ขาดการสนับสนุนทางบุคลากร เจ้าหน้าที่สายสนับสนุน นักวิชาการการศึกษา จาก ม.เกษตรศาสตร์ ยังเป็นอุปสรรคสำคัญในการพัฒนาศูนย์แพทย์"},
+ {id:"T6", code:"EVX", text:"มีการแข่งขันในช่วงการคัดเลือกเข้ารับเป็นนิสิต และการเปรียบเทียบช่วงระหว่างเรียน ทั้งจาก ศูนย์แพทยฯ รพ.ราชบุรี และ รพ.พระมงกุฎ ในกลุ่มนักเรียนแพทย์ด้วยกันเอง อันอาจกระทบต่อการพัฒนานักเรียนและศูนย์แพทย์"},
+ {id:"T7", code:"NCR", text:"มีแรงกดดันจากนักเรียนและสังคมถึงผลการสอบ ศรว. (NL) ในช่วงปี 4-5 จึงต้องมุ่งเน้นถึงการพัฒนาในด้านนี้โดยเร็ว"},
+ {id:"T8", code:"IAA", text:"ระบบฐานข้อมูลและเทคโนโลยีสารสนเทศกลาง สำหรับการประเมินผล หรือการเก็บฐานข้อมูลนิสิต ยังไม่มีความชัดเจนเป็นรูปธรรม เป็นอุปสรรคสำคัญในการติดตามพัฒนานิสิต"}
+];
+
+const QUOTA = {3:3, 2:3, 1:4};
+const votes = {};            // id -> points (3/2/1)
+const LS_KEY = "mec_swot_vote_2569_done";
+
+/* soft-prevent repeat submission on same device */
+if (localStorage.getItem(LS_KEY)) {
+  document.getElementById("screen-vote").style.display = "none";
+  document.getElementById("screen-already").style.display = "block";
+}
+
+/* shuffle (Fisher–Yates) */
+const order = STATEMENTS.slice();
+for (let i = order.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [order[i], order[j]] = [order[j], order[i]];
+}
+
+/* render cards */
+const list = document.getElementById("list");
+order.forEach(s => {
+  const div = document.createElement("div");
+  div.className = "stmt";
+  div.id = "card-" + s.id;
+  div.innerHTML = `
+    <div class="top">
+      <span class="code">[${s.code}]</span>
+      <span class="txt">${s.text}</span>
+    </div>
+    <div class="btns">
+      <button class="vb b3" onclick="toggle('${s.id}',3,this)">3<small>คะแนน</small></button>
+      <button class="vb b2" onclick="toggle('${s.id}',2,this)">2<small>คะแนน</small></button>
+      <button class="vb b1" onclick="toggle('${s.id}',1,this)">1<small>คะแนน</small></button>
+    </div>`;
+  list.appendChild(div);
+});
+
+function countTier(t){ return Object.values(votes).filter(v => v === t).length; }
+
+function toggle(id, tier, btn){
+  const card = document.getElementById("card-" + id);
+  if (votes[id] === tier) {          // unselect
+    delete votes[id];
+  } else {
+    if (countTier(tier) >= QUOTA[tier] && votes[id] !== tier) {
+      toast(`ให้ ${tier} คะแนนครบ ${QUOTA[tier]} ข้อแล้ว — ยกเลิกข้ออื่นก่อน หรือเลือกระดับคะแนนอื่น`);
+      card.classList.add("shake");
+      setTimeout(() => card.classList.remove("shake"), 400);
+      return;
+    }
+    votes[id] = tier;
+  }
+  card.classList.remove("sel1","sel2","sel3");
+  card.querySelectorAll(".vb").forEach(b => b.classList.remove("on"));
+  if (votes[id]) {
+    card.classList.add("sel" + votes[id]);
+    card.querySelector(".b" + votes[id]).classList.add("on");
+  }
+  refresh();
+}
+
+function refresh(){
+  const c3 = countTier(3), c2 = countTier(2), c1 = countTier(1);
+  document.getElementById("c3").textContent = c3;
+  document.getElementById("c2").textContent = c2;
+  document.getElementById("c1").textContent = c1;
+  document.getElementById("q3").classList.toggle("done", c3 === 3);
+  document.getElementById("q2").classList.toggle("done", c2 === 3);
+  document.getElementById("q1").classList.toggle("done", c1 === 4);
+  const total = c3 + c2 + c1;
+  document.getElementById("qprog").style.width = (total / 10 * 100) + "%";
+  const ready = (c3 === 3 && c2 === 3 && c1 === 4);
+  const sb = document.getElementById("submitBtn");
+  sb.disabled = !ready;
+  sb.textContent = ready ? "ส่งโหวต (เลือกครบ 10 ข้อแล้ว)" : `เลือกให้ครบ 10 ข้อเพื่อส่งโหวต (${total}/10)`;
+  document.getElementById("hintTxt").textContent = ready
+    ? "ตรวจทานอีกครั้ง แล้วกดส่งโหวตได้เลย"
+    : `ยังเลือกไม่ครบ — 3 คะแนน ${c3}/3 · 2 คะแนน ${c2}/3 · 1 คะแนน ${c1}/4`;
+
+  // disable buttons of full tiers (except already-selected ones)
+  [3,2,1].forEach(t => {
+    const full = countTier(t) >= QUOTA[t];
+    document.querySelectorAll(".vb.b" + t).forEach(b => {
+      const cardId = b.closest(".stmt").id.replace("card-","");
+      b.disabled = full && votes[cardId] !== t;
+    });
+  });
+}
+
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  document.getElementById("confirmOverlay").classList.add("show");
+});
+function closeConfirm(){ document.getElementById("confirmOverlay").classList.remove("show"); }
+
+async function submitVote(){
+  closeConfirm();
+  document.getElementById("sendingOverlay").classList.add("show");
+  const points = {};
+  STATEMENTS.forEach(s => points[s.id] = votes[s.id] || 0);
+  const payload = { submittedAt: new Date().toISOString(), points: points };
+  try {
+    const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || "server error");
+    localStorage.setItem(LS_KEY, "1");
+    document.getElementById("sendingOverlay").classList.remove("show");
+    document.getElementById("screen-vote").style.display = "none";
+    document.getElementById("screen-done").style.display = "block";
+    window.scrollTo(0,0);
+  } catch (err) {
+    document.getElementById("sendingOverlay").classList.remove("show");
+    toast("ส่งไม่สำเร็จ กรุณาตรวจอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง");
+  }
+}
+</script>
+</body>
+</html>
